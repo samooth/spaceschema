@@ -1,16 +1,16 @@
-# hyperschema
+# spaceschema
 Create and update declarative/versioned binary encoding definitions.
 
-Hyperschema provides a schema builder and a code generator that's designed to enforce versioning rules across updates. This is particularly useful for P2P systems where different peers will be using different schema versions.
+Spaceschema provides a schema builder and a code generator that's designed to enforce versioning rules across updates. This is particularly useful for P2P systems where different peers will be using different schema versions.
 
 Every schema update produces a corresponding version bump, and due to the append-only rule, you'll always be able to encode/decode an object with a particular schema version.
 
 ### Usage
-With Hyperschema, you create namespaces and register struct definitions on those namespaces. The `from` function will attept to load an existing schema from an output directory. The `toDisk` function will write a `schema.json` file (for versioning) and a generated encodings file in `index.js`.
+With Spaceschema, you create namespaces and register struct definitions on those namespaces. The `from` function will attept to load an existing schema from an output directory. The `toDisk` function will write a `schema.json` file (for versioning) and a generated encodings file in `index.js`.
 ```js
-const Hyperschema = require('.')
+const Spaceschema = require('.')
 
-const schema = Hyperschema.from('./schema')
+const schema = Spaceschema.from('./schema')
 const ns1 = schema.namespace('namespace-1')
 ns1.register({
   name: 'basic-struct',
@@ -27,13 +27,13 @@ ns1.register({
   ]
 })
 
-Hyperschema.toDisk(schema)
+Spaceschema.toDisk(schema)
 ```
 
 If you want to generate as ESM, simply use `import` instead of `require` above or set the option explictly in `toDisk` like so
 
 ```js
-Hyperschema.toDisk(schema, { esm: true })
+Spaceschema.toDisk(schema, { esm: true })
 ```
 
 `index.js` will contain generated `compact-encoding` definitions. You can then load/use them as follows:
@@ -114,13 +114,13 @@ All struct definitions must take the following form:
 * `type`: (required) Either a built-in type (i.e. `uint`) or a fully-qualified user-defined type (i.e. `@namespace/another-struct`)
 
 ### API
-Hyperschema lets you define structs and aliases. All [`compact-encoding`](https://github.com/holepunchto/compact-encoding) types are available as built-in types.
+Spaceschema lets you define structs and aliases. All [`compact-encoding`](https://github.com/samooth/compact-encoding) types are available as built-in types.
 
-#### `const schema = Hyperschema.from(json|dir)`
-Create a new Hyperschema instance, either from a JSON object or from an output directory path.
+#### `const schema = Spaceschema.from(json|dir)`
+Create a new Spaceschema instance, either from a JSON object or from an output directory path.
 
-#### `Hyperschema.toDisk(schema)`
-Persist the generated encodings for a Hyperschema instance (previously loaded with `Hyperschema.from(outputDir)`). If the encodings have changed, the version will be bumped.
+#### `Spaceschema.toDisk(schema)`
+Persist the generated encodings for a Spaceschema instance (previously loaded with `Spaceschema.from(outputDir)`). If the encodings have changed, the version will be bumped.
 
 #### `const ns = schema.namespace(name)`
 Return a new schema namespace. All structs/aliases for this namespace will be registered with the `@name` prefix. You can then reference these structs/aliases in subsequent definitions.

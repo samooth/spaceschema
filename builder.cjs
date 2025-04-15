@@ -11,8 +11,8 @@ const JSON_FILE_NAME = 'schema.json'
 const CODE_FILE_NAME = 'index.js'
 
 class ResolvedType {
-  constructor (hyperschema, fqn, description, existing) {
-    this.hyperschema = hyperschema
+  constructor (spaceschema, fqn, description, existing) {
+    this.spaceschema = spaceschema
     this.description = description
     this.name = description?.name || fqn
     this.namespace = description?.namespace || ''
@@ -58,11 +58,11 @@ class Primitive extends ResolvedType {
 }
 
 class Alias extends ResolvedType {
-  constructor (hyperschema, fqn, description, existing) {
-    super(hyperschema, fqn, description, existing)
+  constructor (spaceschema, fqn, description, existing) {
+    super(spaceschema, fqn, description, existing)
     this.isAlias = true
 
-    this.type = hyperschema.resolve(description.alias)
+    this.type = spaceschema.resolve(description.alias)
     if (!this.type) throw new Error(`Cannot resolve alias target ${description.alias} in ${description.name}`)
 
     this.default = this.type.default
@@ -73,8 +73,8 @@ class Alias extends ResolvedType {
       }
       this.version = existing.version
     } else if (!this.derived) {
-      this.hyperschema.maybeBumpVersion()
-      this.version = this.hyperschema.version
+      this.spaceschema.maybeBumpVersion()
+      this.version = this.spaceschema.version
     }
   }
 
@@ -93,11 +93,11 @@ class Alias extends ResolvedType {
 }
 
 class ExternalType extends ResolvedType {
-  constructor (hyperschema, fqn, description, existing) {
-    super(hyperschema, fqn, description, existing)
+  constructor (spaceschema, fqn, description, existing) {
+    super(spaceschema, fqn, description, existing)
 
     this.isExternal = true
-    this.filename = hyperschema.namespaces.get(description.namespace)?.external || null
+    this.filename = spaceschema.namespaces.get(description.namespace)?.external || null
     this.external = description.external
   }
 
@@ -116,8 +116,8 @@ class ExternalType extends ResolvedType {
 }
 
 class Enum extends ResolvedType {
-  constructor (hyperschema, fqn, description, existing) {
-    super(hyperschema, fqn, description, existing)
+  constructor (spaceschema, fqn, description, existing) {
+    super(spaceschema, fqn, description, existing)
 
     this.isEnum = true
     this.enum = []
@@ -145,12 +145,12 @@ class Enum extends ResolvedType {
       }
 
       if (!prev) {
-        hyperschema.maybeBumpVersion()
+        spaceschema.maybeBumpVersion()
       }
 
       this.enum.push({
         key,
-        version: prev ? prev.version : hyperschema.version
+        version: prev ? prev.version : spaceschema.version
       })
     }
   }
@@ -166,8 +166,8 @@ class Enum extends ResolvedType {
 }
 
 class StructField {
-  constructor (hyperschema, struct, position, flag, description) {
-    this.hyperschema = hyperschema
+  constructor (spaceschema, struct, position, flag, description) {
+    this.spaceschema = spaceschema
     this.description = description
     this.name = this.description.name
     this.required = this.description.required
@@ -177,12 +177,12 @@ class StructField {
     this.struct = struct
     this.flag = flag
 
-    this.type = hyperschema.resolve(description.type) || null
+    this.type = spaceschema.resolve(description.type) || null
     this.typeFqn = this.type ? this.type.fqn : description.type
 
     this.array = !!this.description.array
 
-    this.version = description.version || hyperschema.version
+    this.version = description.version || spaceschema.version
 
     if (this.struct.existing) {
       const tag = `${this.struct.fqn}/${this.description.name}`
@@ -196,14 +196,14 @@ class StructField {
         }
         this.version = prevField.version
       } else if (!this.struct.derived) {
-        hyperschema.maybeBumpVersion()
-        this.version = hyperschema.version
+        spaceschema.maybeBumpVersion()
+        this.version = spaceschema.version
       }
     }
   }
 
   link () {
-    if (this.type === null) this.type = this.hyperschema.resolve(this.description.type) || null
+    if (this.type === null) this.type = this.spaceschema.resolve(this.description.type) || null
     if (this.type === null) throw new Error(`Cannot resolve field type ${this.description.type} in ${this.name}`)
   }
 
@@ -223,8 +223,8 @@ class StructField {
 }
 
 class Array extends ResolvedType {
-  constructor (hyperschema, fqn, description, existing) {
-    super(hyperschema, fqn, description, existing)
+  constructor (spaceschema, fqn, description, existing) {
+    super(spaceschema, fqn, description, existing)
     this.isArray = true
     this.default = null
 
@@ -232,7 +232,7 @@ class Array extends ResolvedType {
       throw new Error(`Array ${this.fqn}: required 'type' definition is missing`)
     }
 
-    this.type = hyperschema.resolve(description.type)
+    this.type = spaceschema.resolve(description.type)
     this.framed = this.type.frameable()
 
     if (!description.name) {
@@ -261,8 +261,8 @@ class Array extends ResolvedType {
 }
 
 class Struct extends ResolvedType {
-  constructor (hyperschema, fqn, description, existing) {
-    super(hyperschema, fqn, description, existing)
+  constructor (spaceschema, fqn, description, existing) {
+    super(spaceschema, fqn, description, existing)
     this.isStruct = true
     this.default = null
 
@@ -296,8 +296,8 @@ class Struct extends ResolvedType {
         throw new Error(`A compact struct was expanded: ${this.fqn}`)
       }
     } else if (!this.derived) {
-      this.hyperschema.maybeBumpVersion()
-      this.version = this.hyperschema.version
+      this.spaceschema.maybeBumpVersion()
+      this.version = this.spaceschema.version
     }
 
     for (let i = 0; i < description.fields.length; i++) {
@@ -310,7 +310,7 @@ class Struct extends ResolvedType {
         fieldDescription.required = false
       }
       const flag = !fieldDescription.required ? 2 ** this.optionals.length : 0
-      const field = new StructField(hyperschema, this, i, flag, fieldDescription)
+      const field = new StructField(spaceschema, this, i, flag, fieldDescription)
 
       this.fields.push(field)
       this.fieldsByName.set(field.name, field)
@@ -343,9 +343,9 @@ class Struct extends ResolvedType {
   }
 }
 
-class HyperschemaNamespace {
-  constructor (hyperschema, name) {
-    this.hyperschema = hyperschema
+class SpaceschemaNamespace {
+  constructor (spaceschema, name) {
+    this.spaceschema = spaceschema
     this.name = name
     this.external = null
   }
@@ -355,14 +355,14 @@ class HyperschemaNamespace {
   }
 
   register (description) {
-    return this.hyperschema.register({
+    return this.spaceschema.register({
       ...description,
       namespace: this.name
     })
   }
 }
 
-module.exports = class Hyperschema {
+module.exports = class Spaceschema {
   constructor (json, { dir = null, versioned = true } = {}) {
     this.version = json ? json.version : versioned ? 0 : 1
     this.versioned = versioned
@@ -436,7 +436,7 @@ module.exports = class Hyperschema {
 
   namespace (name) {
     if (this.namespaces.has(name)) throw new Error('Namespace already exists')
-    const ns = new HyperschemaNamespace(this, name)
+    const ns = new SpaceschemaNamespace(this, name)
     this.namespaces.set(name, ns)
     return ns
   }
@@ -461,22 +461,22 @@ module.exports = class Hyperschema {
     return generateCode(this, { esm, filename })
   }
 
-  static toDisk (hyperschema, dir, opts) {
+  static toDisk (spaceschema, dir, opts) {
     if (typeof dir === 'object' && dir) {
       opts = dir
       dir = null
     }
 
-    hyperschema.linkAll()
+    spaceschema.linkAll()
 
-    if (!dir) dir = hyperschema.dir
+    if (!dir) dir = spaceschema.dir
     fs.mkdirSync(dir, { recursive: true })
 
     const jsonPath = p.join(p.resolve(dir), JSON_FILE_NAME)
     const codePath = p.join(p.resolve(dir), CODE_FILE_NAME)
 
-    fs.writeFileSync(jsonPath, JSON.stringify(hyperschema.toJSON(), null, 2), { encoding: 'utf-8' })
-    fs.writeFileSync(codePath, hyperschema.toCode({ ...opts, filename: codePath }), { encoding: 'utf-8' })
+    fs.writeFileSync(jsonPath, JSON.stringify(spaceschema.toJSON(), null, 2), { encoding: 'utf-8' })
+    fs.writeFileSync(codePath, spaceschema.toCode({ ...opts, filename: codePath }), { encoding: 'utf-8' })
   }
 
   static from (json, opts) {

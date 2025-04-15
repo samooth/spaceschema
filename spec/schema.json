@@ -1,0 +1,294 @@
+{
+  "version": 1,
+  "schema": [
+    {
+      "name": "basic-alias",
+      "namespace": "namespace-2",
+      "alias": "string",
+      "version": 1
+    },
+    {
+      "name": "basic-bools",
+      "namespace": "namespace-1",
+      "compact": true,
+      "flagsPosition": 0,
+      "fields": [
+        {
+          "name": "bool1",
+          "type": "bool",
+          "version": 1
+        },
+        {
+          "name": "bool2",
+          "type": "bool",
+          "version": 1
+        },
+        {
+          "name": "bool3",
+          "type": "bool",
+          "version": 1
+        },
+        {
+          "name": "bool4",
+          "type": "bool",
+          "version": 1
+        }
+      ]
+    },
+    {
+      "name": "basic-no-optionals",
+      "namespace": "namespace-1",
+      "compact": false,
+      "flagsPosition": 1,
+      "fields": [
+        {
+          "name": "id",
+          "required": true,
+          "type": "uint",
+          "version": 1
+        },
+        {
+          "name": "other",
+          "type": "uint",
+          "version": 1
+        }
+      ]
+    },
+    {
+      "name": "basic-single-optional",
+      "namespace": "namespace-1",
+      "compact": false,
+      "flagsPosition": 0,
+      "fields": [
+        {
+          "name": "id",
+          "type": "uint",
+          "version": 1
+        }
+      ]
+    },
+    {
+      "name": "basic-struct",
+      "namespace": "namespace-1",
+      "compact": false,
+      "flagsPosition": 0,
+      "fields": [
+        {
+          "name": "id",
+          "required": true,
+          "type": "uint",
+          "version": 1
+        },
+        {
+          "name": "basicString",
+          "required": true,
+          "type": "string",
+          "version": 1
+        },
+        {
+          "name": "basicArray",
+          "array": true,
+          "type": "uint",
+          "version": 1
+        },
+        {
+          "name": "basicAlias",
+          "type": "@namespace-2/basic-alias",
+          "version": 1
+        },
+        {
+          "name": "anotherString",
+          "type": "string",
+          "version": 1
+        },
+        {
+          "name": "andAnother",
+          "type": "uint",
+          "version": 1
+        },
+        {
+          "name": "yetAnother",
+          "type": "string",
+          "version": 1
+        }
+      ]
+    },
+    {
+      "name": "basic-compact-struct",
+      "namespace": "namespace-1",
+      "compact": true,
+      "flagsPosition": 2,
+      "fields": [
+        {
+          "name": "id",
+          "required": true,
+          "type": "uint",
+          "version": 1
+        },
+        {
+          "name": "basicString",
+          "required": true,
+          "type": "string",
+          "version": 1
+        },
+        {
+          "name": "basicArray",
+          "array": true,
+          "type": "uint",
+          "version": 1
+        },
+        {
+          "name": "basicAlias",
+          "type": "@namespace-2/basic-alias",
+          "version": 1
+        },
+        {
+          "name": "anotherString",
+          "type": "string",
+          "version": 1
+        }
+      ]
+    },
+    {
+      "name": "basic-embedded-struct",
+      "namespace": "namespace-1",
+      "compact": false,
+      "flagsPosition": 1,
+      "fields": [
+        {
+          "name": "outerString",
+          "required": true,
+          "type": "string",
+          "version": 1
+        },
+        {
+          "name": "embedded",
+          "type": "@namespace-1/basic-struct",
+          "version": 1
+        },
+        {
+          "name": "embedded2",
+          "type": "@namespace-1/basic-struct",
+          "version": 1
+        },
+        {
+          "name": "embedded3",
+          "type": "@namespace-1/basic-struct",
+          "version": 1
+        },
+        {
+          "name": "embedded4",
+          "type": "@namespace-1/basic-struct",
+          "version": 1
+        }
+      ]
+    },
+    {
+      "name": "basic-compact-embedded-struct",
+      "namespace": "namespace-1",
+      "compact": false,
+      "flagsPosition": 1,
+      "fields": [
+        {
+          "name": "outerString",
+          "required": true,
+          "type": "string",
+          "version": 1
+        },
+        {
+          "name": "embeddedCompact",
+          "type": "@namespace-1/basic-compact-struct",
+          "version": 1
+        },
+        {
+          "name": "embeddedNone",
+          "type": "none",
+          "version": 1
+        }
+      ]
+    },
+    {
+      "name": "deeper-embedded-struct",
+      "namespace": "namespace-1",
+      "compact": false,
+      "flagsPosition": 1,
+      "fields": [
+        {
+          "name": "outerString",
+          "required": true,
+          "type": "string",
+          "version": 1
+        },
+        {
+          "name": "embedded",
+          "type": "@namespace-1/basic-embedded-struct",
+          "version": 1
+        },
+        {
+          "name": "another",
+          "type": "uint",
+          "version": 1
+        }
+      ]
+    },
+    {
+      "name": "deeper-embedded-struct-2",
+      "namespace": "namespace-1",
+      "compact": false,
+      "flagsPosition": 1,
+      "fields": [
+        {
+          "name": "outerString",
+          "required": true,
+          "type": "string",
+          "version": 1
+        },
+        {
+          "name": "embedded",
+          "type": "@namespace-1/basic-embedded-struct",
+          "version": 1
+        },
+        {
+          "name": "an-optional",
+          "type": "string",
+          "version": 1
+        },
+        {
+          "name": "another",
+          "type": "uint",
+          "version": 1
+        },
+        {
+          "name": "another-one",
+          "type": "uint",
+          "version": 1
+        }
+      ]
+    },
+    {
+      "name": "single-bool-at-end",
+      "namespace": "namespace-1",
+      "compact": false,
+      "flagsPosition": 2,
+      "fields": [
+        {
+          "name": "string1",
+          "required": true,
+          "type": "string",
+          "version": 1
+        },
+        {
+          "name": "string2",
+          "required": true,
+          "type": "string",
+          "version": 1
+        },
+        {
+          "name": "optional",
+          "type": "bool",
+          "version": 1
+        }
+      ]
+    }
+  ]
+}

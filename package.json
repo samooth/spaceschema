@@ -1,7 +1,9 @@
 {
-  "name": "hyperschema",
-  "version": "1.10.4",
+  "name": "spaceschema",
+  "version": "0.0.1",
   "description": "Create registries of declarative compact-encoding schemas",
+  "main":"builder.cjs",
+  "module":"builder.mjs",
   "files": [
     "lib/*.js",
     "builder.mjs",
@@ -36,14 +38,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/holepunchto/hyperschema.git"
+    "url": "git+https://github.com/samooth/spaceschema.git"
   },
   "author": "Holepunch",
   "license": "Apache-2.0",
   "bugs": {
-    "url": "https://github.com/holepunchto/hyperschema/issues"
+    "url": "https://github.com/samooth/spaceschema/issues"
   },
-  "homepage": "https://github.com/holepunchto/hyperschema#readme",
+  "homepage": "https://github.com/samooth/spaceschema#readme",
   "dependencies": {
     "bare-fs": "^4.0.1",
     "compact-encoding": "^2.15.0",

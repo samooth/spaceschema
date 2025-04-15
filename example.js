@@ -1,6 +1,6 @@
-const Hyperschema = require('./builder.cjs')
+const Spaceschema = require('./builder.cjs')
 
-const schema = Hyperschema.from('./spec')
+const schema = Spaceschema.from('./spec')
 const ns1 = schema.namespace('namespace-1')
 const ns2 = schema.namespace('namespace-2')
 
@@ -237,4 +237,4 @@ ns1.register({
   ]
 })
 
-Hyperschema.toDisk(schema)
+Spaceschema.toDisk(schema)
