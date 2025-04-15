@@ -1,6 +1,6 @@
 import Spaceschema from './builder.cjs'
 
-class ESMHyperschema extends Spaceschema {
+class ESMSpaceschema extends Spaceschema {
   static esm = true
 }
 
