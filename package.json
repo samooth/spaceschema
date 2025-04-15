@@ -1,9 +1,9 @@
 {
   "name": "spaceschema",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Create registries of declarative compact-encoding schemas",
-  "main":"builder.cjs",
-  "module":"builder.mjs",
+  "main": "builder.cjs",
+  "module": "builder.mjs",
   "files": [
     "lib/*.js",
     "builder.mjs",
