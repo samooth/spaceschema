@@ -1,7 +1,7 @@
-import Hyperschema from './builder.cjs'
+import Spaceschema from './builder.cjs'
 
-class ESMHyperschema extends Hyperschema {
+class ESMHyperschema extends Spaceschema {
   static esm = true
 }
 
-export default ESMHyperschema
+export default ESMSpaceschema

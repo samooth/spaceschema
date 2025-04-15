@@ -2,7 +2,7 @@ const p = require('path')
 const fs = require('fs')
 const tmp = require('test-tmp')
 
-const Hyperschema = require('../../builder.cjs')
+const Spaceschema = require('../../builder.cjs')
 
 class TestBuilder {
   constructor (dir, test) {
@@ -13,13 +13,13 @@ class TestBuilder {
   }
 
   async rebuild (builder) {
-    const schema = Hyperschema.from(this.dir)
+    const schema = Spaceschema.from(this.dir)
 
     builder(schema)
 
     this.dir = await makeDir(this.test)
 
-    Hyperschema.toDisk(schema, this.dir)
+    Spaceschema.toDisk(schema, this.dir)
 
     this.module = require(this.dir)
     this.json = require(p.join(this.dir, 'schema.json'))
